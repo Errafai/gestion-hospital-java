@@ -1,1 +1,1 @@
-here the frontend of the application
+here is the backtend of the application
