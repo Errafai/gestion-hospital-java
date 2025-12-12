@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { LogIn, UserPlus } from 'lucide-react'
 import { navLinks, authLinks } from '../../routes/map'
+import logo from '../../../assets/images/hospital-building.png'
 
 export const Navbar = () => {
   const navigate = useNavigate()
@@ -10,7 +11,7 @@ export const Navbar = () => {
 
   return (
     <div className="w-full h-20 bg-blue-500 flex items-center px-4 shadow-md justify-between">
-      <h1 className="text-2xl font-bold text-white font-serif">Hospital Management</h1>
+      <NavLink to="/" className="text-2xl font-bold text-white font-serif flex items-center justify-center text-4xl" ><img className='pl-7 py-2 pr-2'  style={{ height: '80px', width: 'auto' }} src={logo} alt="Hospital Logo" /> Hospital ENSAS</NavLink>
       <nav className="flex items-center gap-6">
         <ul className="flex items-center gap-6">
           {navLinks.map(({ label, to }) => (
@@ -39,7 +40,7 @@ export const Navbar = () => {
                 className={buttonBase}
                 onClick={() => navigate(to)}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-linear-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative px-5 py-2.5 border border-white/30 rounded-xl backdrop-blur-sm bg-white/10 group-hover:bg-transparent transition-all duration-300">
                   <div className="flex items-center space-x-2">
                     <span className="text-white font-semibold">{label}</span>

@@ -1,4 +1,5 @@
 export const routes = {
+  home: "/",
   login: "/login",
   register: "/register",
   dashboard: "/dashboard",
@@ -8,16 +9,29 @@ export const routes = {
   appointments: "/appointments",
   calendar: "/calendar",
   dossiers: "/dossiers",
+  aboutUs: "/about-us",
+  equipments: "/equipments",
+  contactUs: "/contact-us",
+  reserve: "/reserve",
 };
 
 export const navLinks = [
-  { label: "Dashboard", to: routes.dashboard },
-  { label: "Patients", to: routes.patients },
-  { label: "Appointments", to: routes.appointments },
-  { label: "Dossiers", to: routes.dossiers },
+  // { label: "Home", to: routes.home },
+  { label: "About Us", to: routes.aboutUs },
+  { label: "Equipments", to: routes.equipments },
+  { label: "Contact Us", to: routes.contactUs },
+  { label: "Appointments", to: routes.appointments},
+  { label: "Reserve", to: routes.reserve},
 ];
 
 export const authLinks = [
   { label: "Login", to: routes.login },
   { label: "Register", to: routes.register },
+];
+
+export const DashboardLinks = [
+  { label: "Overview", to: routes.dashboard },
+  { label: "Patients", to: routes.patients },
+  { label: "Appointments", to: routes.appointments },
+  { label: "Dossiers", to: routes.dossiers },
 ];

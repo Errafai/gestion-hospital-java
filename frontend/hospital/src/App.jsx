@@ -12,6 +12,10 @@ import AddPatientPage from './app/pages/patients/AddPatientPage'
 import AppointmentsPage from './app/pages/appointments/AppointmentsPage'
 import CalendarPage from './app/pages/appointments/CalendarPage'
 import DossierPage from './app/pages/dossiers/DossierPage'
+import { About } from './app/pages/home/About'
+import { Equipment } from './app/pages/home/Equipment'
+import { Contact } from './app/pages/home/Contact'
+import HomePage from './app/pages/home/HomePage'
 
 function App() {
   return (
@@ -20,7 +24,11 @@ function App() {
         <Navbar />
         <main className="flex-grow">
           <Routes>
+            <Route path={routes.home} element={<HomePage />} />
             <Route path={routes.login} element={<LoginPage />} />
+            <Route path={routes.aboutUs} element={<About />} />
+            <Route path={routes.equipments} element={<Equipment />} />
+            <Route path={routes.contactUs} element={<Contact />} />
             <Route path={routes.register} element={<RegisterPage />} />
             <Route path={routes.dashboard} element={<DashboardPage />} />
             <Route path={routes.patients} element={<PatientsPage />} />
