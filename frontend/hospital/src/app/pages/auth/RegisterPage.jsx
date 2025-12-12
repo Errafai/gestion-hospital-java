@@ -11,8 +11,8 @@ export const RegisterPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     /*
-     * TODO backend login wiring:
-     * - Call POST /api/auth/login with { email, password }.
+     * TODO backend registration wiring:
+     * - Call POST /api/auth/register with { name, email, password, role }.
      * - Expect tokens and user role in response; store tokens (localStorage/cookie) and set Authorization header for api client.
      * - Redirect after success (confirm mapping): admin -> /dashboard, doctor -> /appointments, nurse -> /patients.
      * - Show a user-friendly error on 4xx/5xx and keep the form values so the user can retry.
@@ -83,7 +83,7 @@ export const RegisterPage = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Role
               </label>
-              <select name="role" id="role" className="w-full py-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg">
+              <select name="role" id="role" value={role} onChange={(e) => setRole(e.target.value)} className="w-full py-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg">
                 <option value="admin">Admin</option>
                 <option value="doctor">Doctor</option>
                 <option value="nurse">Nurse</option>
