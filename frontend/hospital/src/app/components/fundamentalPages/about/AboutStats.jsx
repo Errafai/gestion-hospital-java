@@ -9,7 +9,7 @@ export const AboutStats = () => {
   ]
 
   return (
-    <div className="bg-blue-600 text-white py-16">
+    <div className="bg-blue-400 text-white py-16">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8 text-center">
           {stats.map((stat, idx) => (

@@ -1,0 +1,13 @@
+import who from "../../../../assets/images/doctors.jpg"
+import vision from "../../../../assets/images/vesion.jpg"
+import commitment from "../../../../assets/images/commitment.jpg"
+import education from "../../../../assets/images/education.jpg"
+
+const data = [
+    {image: who,title:"who are we" ,desc:"ENSA Hospital is a modern healthcare institution committed to delivering high-quality medical services while fostering innovation, research, and education. As a hospital closely connected to the academic and engineering environment of ENSA, we combine medical expertise with technological advancement to improve patient care and healthcare systems.Our mission is to provide accessible, reliable, and patient-centered healthcare services, supported by a multidisciplinary team of doctors, nurses, engineers, and researchers. By integrating advanced medical technologies and evidence-based practices, ENSA Hospital strives to meet the evolving health needs of our community."},
+    {image: vision,title:"Our Vision" ,desc:"We envision ENSA Hospital as a reference center for smart healthcare solutions, where innovation and compassion work together. Through continuous research, digital transformation, and medical education, we aim to shape the future of healthcare delivery at both national and international levels.Our vision is built on three core pillars: excellence in care, technological innovation, and human values. Every patient is treated with dignity, respect, and professionalism, ensuring a safe and supportive healing environment."},
+    {image: commitment,title:"Our Commitment to Excellence" ,desc:"At ENSA Hospital, quality and safety are at the center of everything we do. We follow strict medical standards and continuously improve our services through training, evaluation, and innovation. Our teams work collaboratively to ensure accurate diagnoses, effective treatments, and personalized care for every patient.By embracing digital health systems, smart monitoring tools, and data-driven decision-making, ENSA Hospital represents a new generation of hospitals where engineering and medicine come together for better outcomes."},
+    {image: education,title:"Community and Education" ,desc:"Beyond patient care, ENSA Hospital plays a key role in education and community engagement. We actively contribute to the training of future engineers and healthcare professionals by offering a real-world environment where theory meets practice.Through workshops, research projects, and partnerships, we promote a culture of learning and innovation that benefits both our patients and society as a whole."}
+]
+
+export default data
