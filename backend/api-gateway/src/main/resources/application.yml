@@ -1,0 +1,66 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - StripPrefix=1
+            
+        - id: patient-service
+          uri: lb://patient-service
+          predicates:
+            - Path=/api/patients/**
+          filters:
+            - StripPrefix=1
+            
+        - id: rendez-vous-service
+          uri: lb://rendez-vous-service
+          predicates:
+            - Path=/api/rendez-vous/**
+          filters:
+            - StripPrefix=1
+            
+        - id: medecins-service
+          uri: lb://rendez-vous-service
+          predicates:
+            - Path=/api/medecins/**
+          filters:
+            - StripPrefix=1
+            
+        - id: dossier-service
+          uri: lb://dossier-service
+          predicates:
+            - Path=/api/dossiers/**
+          filters:
+            - StripPrefix=1
+            
+        - id: consultations-service
+          uri: lb://dossier-service
+          predicates:
+            - Path=/api/consultations/**
+          filters:
+            - StripPrefix=1
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+
