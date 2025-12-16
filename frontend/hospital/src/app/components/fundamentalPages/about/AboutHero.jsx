@@ -26,7 +26,7 @@ export const AboutHero = () => {
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, rgba(79, 70, 229, 0.4) 0%, rgba(59, 130, 246, 0.3) 100%);
+      // background: linear-gradient(135deg, rgba(79, 70, 229, 0.4) 0%, rgba(59, 130, 246, 0.3) 100%);
       pointer-events: none;
     }
 

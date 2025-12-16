@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Send } from 'lucide-react'
+import { Send, CheckCircle } from 'lucide-react'
 
 export const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -25,17 +25,14 @@ export const ContactForm = () => {
   }
 
   return (
-    <div className="absolute top-20 right-0 w-full md:w-1/2 md:relative md:top-0">
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 gap-12">
-          <div></div>
-          {/* Contact Form */}
-          <div className="bg-white p-8 rounded-lg shadow-lg">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">Send us a Message</h2>
+    <div className="bg-white p-10 rounded-xl shadow-xl border border-gray-200 hover:shadow-2xl transition-shadow">
+      <h2 className="text-3xl font-bold text-gray-800 mb-2">Send us a Message</h2>
+      <p className="text-gray-600 mb-8">Fill out the form below and we'll get back to you as soon as possible.</p>
             
             {submitted && (
-              <div className="mb-6 p-4 bg-green-100 text-green-700 rounded-lg">
-                Thank you for your message! We'll get back to you soon.
+              <div className="mb-6 p-4 bg-green-50 border border-green-300 text-green-800 rounded-lg flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                <span>Thank you for your message! We'll get back to you within 24 hours.</span>
               </div>
             )}
 
@@ -48,7 +45,7 @@ export const ContactForm = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   placeholder="Your Name"
                 />
               </div>
@@ -60,7 +57,7 @@ export const ContactForm = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   placeholder="your@email.com"
                 />
               </div>
@@ -72,7 +69,7 @@ export const ContactForm = () => {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   placeholder="Subject"
                 />
               </div>
@@ -83,24 +80,21 @@ export const ContactForm = () => {
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  rows="5"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  rows="6"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"
                   placeholder="Your message here..."
                 />
               </div>
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all flex items-center justify-center gap-2"
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 transform hover:scale-105"
               >
                 <Send className="w-5 h-5" />
                 Send Message
               </button>
             </form>
           </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+        )
+      }
 
 export default ContactForm
