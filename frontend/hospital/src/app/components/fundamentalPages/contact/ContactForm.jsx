@@ -22,6 +22,11 @@ export const ContactForm = () => {
     setSubmitted(true)
     setFormData({ name: '', email: '', subject: '', message: '' })
     setTimeout(() => setSubmitted(false), 5000)
+
+
+    // in here the api for submit the form will appear here :
+
+    
   }
 
   return (

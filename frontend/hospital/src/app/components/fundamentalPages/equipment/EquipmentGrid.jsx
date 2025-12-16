@@ -42,17 +42,17 @@ export const EquipmentGrid = () => {
   ]
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-16">
-      <div className="text-center mb-12">
+    <div className="w-[90%] mx-auto px-4 py-16">
+      <div className="flex flex-col items-start mb-12">
         <h2 className="text-4xl font-bold text-gray-800 mb-4">Our Facilities</h2>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <p className="text-xl text-gray-600 max-w-3xl ">
           We invest in the latest medical technology to ensure accurate diagnoses,
           effective treatments, and the best outcomes for our patients.
         </p>
       </div>
 
       {/* Equipment Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
         {equipmentList.map((equipment, index) => {
           const Icon = equipment.icon
           return (
