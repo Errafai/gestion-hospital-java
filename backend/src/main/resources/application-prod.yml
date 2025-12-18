@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://mysql:3306/hospital_db?useSSL=false&serverTimezone=UTC}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+logging:
+  level:
+    root: WARN
+    com.hospital: INFO
+
+jwt:
+  secret: ${JWT_SECRET:hospital-management-secret-key-2024-very-secure-and-long-key-for-jwt-token-generation}
+  expiration: ${JWT_EXPIRATION:86400000}
+
