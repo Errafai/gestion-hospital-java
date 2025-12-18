@@ -2,7 +2,7 @@ export const routes = {
   home: "/",
   login: "/login",
   register: "/register",
-  dashboard: "/dashboard",
+  dashboard: "/patients/dashboard",
   patients: "/patients",
   patientDetail: (id = ":id") => `/patients/${id}`,
   patientAdd: "/patients/add",

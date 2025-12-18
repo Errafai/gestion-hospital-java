@@ -1,11 +1,11 @@
 import React from "react";
-import contactUs from "../../../../assets/images/equipments.jpg";
+import Equipment from "../../../../assets/images/equipments.jpg";
 import { Activity, Beaker, Zap, Heart } from "lucide-react";
 
 export const EquipmentHero = () => {
   const styling = `
       .hero{
-        background: linear-gradient(130deg, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, .5) 100%), url(${contactUs}) center / cover no-repeat;
+        background: linear-gradient(130deg, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, .5) 100%), url(${Equipment}) center / cover no-repeat;
         background-attachment: fixed;
         position:relative;
         display:flex;

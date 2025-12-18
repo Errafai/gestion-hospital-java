@@ -10,12 +10,13 @@ import PatientsPage from './app/pages/patients/PatientsPage'
 import PatientDetailPage from './app/pages/patients/PatientDetailPage'
 import AddPatientPage from './app/pages/patients/AddPatientPage'
 import AppointmentsPage from './app/pages/appointments/AppointmentsPage'
-import CalendarPage from './app/pages/appointments/CalendarPage'
+// import CalendarPage from './app/pages/appointments/CalendarPage'
 import DossierPage from './app/pages/dossiers/DossierPage'
 import { About } from './app/pages/home/About'
 import { Equipment } from './app/pages/home/Equipment'
 import { Contact } from './app/pages/home/Contact'
 import HomePage from './app/pages/home/HomePage'
+import Reserve from './app/pages/home/Reserve'
 
 function App() {
   return (
@@ -35,8 +36,9 @@ function App() {
             <Route path={routes.patientDetail()} element={<PatientDetailPage />} />
             <Route path={routes.patientAdd} element={<AddPatientPage />} />
             <Route path={routes.appointments} element={<AppointmentsPage />} />
-            <Route path={routes.calendar} element={<CalendarPage />} />
+            {/* <Route path={routes.calendar} element={<CalendarPage />} /> */}
             <Route path={routes.dossiers} element={<DossierPage />} />
+            <Route path={routes.reserve} element={<Reserve />} />
           </Routes>
         </main>
         <Footer />
