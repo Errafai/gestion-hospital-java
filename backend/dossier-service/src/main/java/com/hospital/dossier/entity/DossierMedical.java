@@ -12,77 +12,77 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Entité JPA représentant le dossier médical d'un patient.
- * Chaque patient possède au maximum un dossier médical.
- */
 @Entity
 @Table(name = "dossiers_medicaux")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+/**
+ * Entité représentant le dossier médical d'un patient.
+ * Centralise l'historique médical, les consultations et les documents.
+ */
 public class DossierMedical {
     
     /**
-     * Identifiant technique du dossier médical (clé primaire).
+     * Identifiant unique du dossier.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     /**
-     * Identifiant du patient auquel appartient ce dossier.
+     * ID du patient associé.
      */
     @Column(nullable = false)
     private Long patientId;
     
     /**
-     * Numéro de dossier unique (référence médicale utilisée par le personnel).
+     * Numéro de dossier unique.
      */
     @Column(unique = true, nullable = false, length = 50)
     private String numeroDossier;
     
     /**
-     * Date de création du dossier médical (gérée automatiquement).
+     * Date d'ouverture du dossier.
      */
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime dateCreation;
     
     /**
-     * Antécédents médicaux du patient (maladies, pathologies chroniques…).
+     * Antécédents médicaux (maladies chroniques, etc.).
      */
     @Column(columnDefinition = "TEXT")
     private String antecedentsMedicaux;
     
     /**
-     * Antécédents chirurgicaux du patient (opérations passées).
+     * Antécédents chirurgicaux (opérations passées).
      */
     @Column(columnDefinition = "TEXT")
     private String antecedentsChirurgicaux;
     
     /**
-     * Antécédents familiaux (maladies présentes dans la famille).
+     * Antécédents familiaux (hérédité).
      */
     @Column(columnDefinition = "TEXT")
     private String antecedentsFamiliaux;
     
     /**
-     * Date de dernière mise à jour du dossier (gérée automatiquement).
+     * Date de dernière mise à jour.
      */
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
     
     /**
-     * Liste des consultations médicales associées à ce dossier.
+     * Liste des consultations associées au dossier.
      */
     @OneToMany(mappedBy = "dossierMedical", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Consultation> consultations = new ArrayList<>();
     
     /**
-     * Liste des documents médicaux associés (analyses, comptes-rendus…).
+     * Liste des documents (PDF, Imagerie) associés.
      */
     @OneToMany(mappedBy = "dossierMedical", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();

@@ -11,41 +11,45 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Entité JPA représentant une consultation médicale liée à un dossier.
- */
 @Entity
 @Table(name = "consultations")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+/**
+ * Entité représentant une consultation médicale.
+ * Enregistre le diagnostic, le traitement et les prescriptions.
+ */
 public class Consultation {
     
+    /**
+     * Identifiant unique de la consultation.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     /**
-     * Dossier médical auquel cette consultation est rattachée.
+     * Le dossier médical auquel cette consultation est rattachée.
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dossier_medical_id", nullable = false)
     private DossierMedical dossierMedical;
     
     /**
-     * Identifiant du médecin qui a réalisé la consultation.
+     * ID du médecin ayant réalisé la consultation.
      */
     @Column(nullable = false)
     private Long medecinId;
     
     /**
-     * Identifiant du rendez-vous lié à cette consultation (optionnel).
+     * ID du rendez-vous associé (optionnel).
      */
     private Long rendezVousId;
     
     /**
-     * Date et heure de réalisation de la consultation.
+     * Date de la consultation.
      */
     @Column(nullable = false)
     private LocalDateTime dateConsultation;
@@ -57,32 +61,32 @@ public class Consultation {
     private String symptomes;
     
     /**
-     * Diagnostic posé par le médecin.
+     * Diagnostic établi par le médecin.
      */
     @Column(columnDefinition = "TEXT")
     private String diagnostic;
     
     /**
-     * Traitement prescrit au patient (médicaments, recommandations…).
+     * Traitement prescrit.
      */
     @Column(columnDefinition = "TEXT")
     private String traitement;
     
     /**
-     * Observations et remarques complémentaires du médecin.
+     * Observations supplémentaires.
      */
     @Column(columnDefinition = "TEXT")
     private String observations;
     
     /**
-     * Date de création de l'enregistrement de la consultation.
+     * Date de création de l'enregistrement.
      */
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
     
     /**
-     * Liste des prescriptions (ordonnances) associées à cette consultation.
+     * Liste des prescriptions médicamenteuses associées.
      */
     @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Prescription> prescriptions = new ArrayList<>();

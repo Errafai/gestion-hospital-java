@@ -10,24 +10,17 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-/**
- * Entité représentant un utilisateur de la plateforme (compte de connexion).
- * Stockée dans la base de données {@code auth_db} dans la table {@code users}.
- * Cette entité est utilisée par le service d'authentification pour gérer :
- * - la connexion (username / password)
- * - les rôles (ADMIN, MEDECIN, RECEPTIONNISTE)
- * - l'état du compte (actif ou non)
- */
 @Entity
 @Table(name = "users")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+/**
+ * Représente un utilisateur du système (Administrateur, Médecin, Réceptionniste, etc.).
+ * Cette entité gère l'authentification et les droits d'accès.
+ */
 public class User {
     
     /**
-     * Identifiant technique unique de l'utilisateur (clé primaire).
+     * Identifiant unique de l'utilisateur.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,68 +33,158 @@ public class User {
     private String username;
     
     /**
-     * Mot de passe chiffré (BCrypt) stocké en base.
-     * Le mot de passe en clair ne doit jamais être enregistré.
+     * Mot de passe hashé de l'utilisateur.
+     * Ne jamais stocker en clair.
      */
     @Column(nullable = false)
     private String password;
     
     /**
-     * Email unique de l'utilisateur.
+     * Adresse email unique de l'utilisateur.
      */
     @Column(unique = true, nullable = false, length = 100)
     private String email;
     
     /**
-     * Nom de famille de l'utilisateur.
+     * Nom de famille.
      */
     @Column(nullable = false, length = 100)
     private String nom;
     
     /**
-     * Prénom de l'utilisateur.
+     * Prénom.
      */
     @Column(nullable = false, length = 100)
     private String prenom;
     
     /**
-     * Rôle de l'utilisateur dans le système.
-     * Utilisé par Spring Security pour contrôler l'accès aux ressources.
+     * Rôle de l'utilisateur définissant ses permissions.
      */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
     
     /**
-     * Indique si le compte est actif (true) ou désactivé/bloqué (false).
+     * Indique si le compte est actif ou désactivé.
      */
     @Column(nullable = false)
     private Boolean actif = true;
     
     /**
      * Date de création du compte.
-     * Remplie automatiquement grâce à l'auditing JPA.
      */
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
     
     /**
-     * Date de dernière mise à jour des informations du compte.
-     * Remplie automatiquement grâce à l'auditing JPA.
+     * Date de dernière modification du compte.
      */
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
     
     /**
-     * Enumération des rôles possibles pour un utilisateur.
-     * - ADMIN : accès complet à la plateforme
-     * - MEDECIN : accès aux fonctionnalités médicales (rendez-vous, consultations, dossiers)
-     * - RECEPTIONNISTE : gestion des patients et des rendez-vous uniquement
+     * Rôles disponibles dans l'application.
      */
     public enum Role {
         ADMIN, MEDECIN, RECEPTIONNISTE
+    }
+
+    public User() {
+    }
+
+    public User(Long id, String username, String password, String email, String nom, String prenom, Role role, Boolean actif, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.role = role;
+        this.actif = actif;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Boolean getActif() {
+        return actif;
+    }
+
+    public void setActif(Boolean actif) {
+        this.actif = actif;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
 

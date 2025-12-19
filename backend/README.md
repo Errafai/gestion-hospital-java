@@ -1,8 +1,8 @@
-## 🏥 Hospital Management System - Architecture Microservices
+# 🏥 Hospital Management System - Architecture Microservices
 
 Système de gestion hospitalière développé avec **Spring Boot 3.x** et **Architecture Microservices**.
 
-### 📋 Description
+## 📋 Description
 
 Backend REST API en architecture microservices pour un système de gestion hospitalière complet incluant :
 - Gestion des patients
@@ -149,80 +149,50 @@ Tous les endpoints sont accessibles via l'API Gateway sur le port **8080** :
 - `POST /api/consultations` - Créer une consultation
 - `PUT /api/consultations/{id}` - Modifier une consultation
 
-### 🔐 Sécurité
+## 🔐 Sécurité
 
 - Authentification JWT via Auth Service
 - Rôles : ADMIN, MEDECIN, RECEPTIONNISTE
 - API Gateway route les requêtes vers les services appropriés
 
-### 🗄️ Bases de Données
+## 🗄️ Bases de Données
 
-Chaque service a sa propre base de données (pattern *Database per Service*) :
-- `auth_db` : table `users` (comptes applicatifs et rôles)
-- `patient_db` : table `patients` (informations patients)
-- `rendezvous_db` : tables `medecins`, `rendez_vous`
-- `dossier_db` : tables `dossiers_medicaux`, `consultations`, `prescriptions`, `documents`
+Chaque service a sa propre base de données :
+- `auth_db` - Users
+- `patient_db` - Patients
+- `rendezvous_db` - Rendez-vous, Médecins
+- `dossier_db` - Dossiers médicaux, Consultations, Prescriptions, Documents
 
-### 🧩 Modèle de données & relations (ERD logique)
-
-> Remarque : chaque microservice a sa propre base, donc l’ERD ci‑dessous est **logique/fonctionnel** (les relations entre services se font par IDs, pas par de vraies foreign keys SQL entre bases).
-
-- **Utilisateurs & rôles (`auth_db`)**
-  - `users (id, username, email, password, nom, prenom, role, actif, created_at, updated_at)`
-  - `role ∈ {ADMIN, MEDECIN, RECEPTIONNISTE}`
-
-- **Patients (`patient_db`)**
-  - `patients (id, numero_patient, nom, prenom, date_naissance, sexe, cin, telephone, email, adresse, ville, groupe_sanguin, allergies, created_at, updated_at)`
-
-- **Médecins & Rendez-vous (`rendezvous_db`)**
-  - `medecins (id, user_id, numero_ordre, specialite, telephone, disponible, created_at)`  
-    - `medecins.user_id` → référence logique vers `users.id` (dans `auth_db`) avec `role = MEDECIN`.
-  - `rendez_vous (id, patient_id, medecin_id, date_rdv, heure_debut, heure_fin, motif, statut, notes, created_at, updated_at)`  
-    - `rendez_vous.patient_id` → référence logique vers `patients.id` (dans `patient_db`)  
-    - `rendez_vous.medecin_id` → référence vers `medecins.id` (même base `rendezvous_db`)
-
-- **Dossiers médicaux & consultations (`dossier_db`)**
-  - `dossiers_medicaux (id, patient_id, numero_dossier, date_creation, antecedents_medicaux, antecedents_chirurgicaux, antecedents_familiaux, updated_at)`  
-    - `dossiers_medicaux.patient_id` → référence logique vers `patients.id` (dans `patient_db`)
-  - `consultations (id, dossier_medical_id, medecin_id, rendez_vous_id, date_consultation, symptomes, diagnostic, traitement, observations, created_at)`  
-    - `consultations.dossier_medical_id` → FK vers `dossiers_medicaux.id` (même base `dossier_db`)  
-    - `consultations.medecin_id` → référence logique vers `medecins.id` (dans `rendezvous_db`)  
-    - `consultations.rendez_vous_id` → référence logique vers `rendez_vous.id` (dans `rendezvous_db`)
-  - `prescriptions (id, consultation_id, ... )`  
-    - `prescriptions.consultation_id` → FK vers `consultations.id`
-  - `documents (id, dossier_medical_id, ... )`  
-    - `documents.dossier_medical_id` → FK vers `dossiers_medicaux.id`
-
-#### ERD logique (vue d’ensemble)
-
-```text
-auth_db.users (1) ──< (N) rendezvous_db.medecins
-
-patient_db.patients (1) ──< (N) rendezvous_db.rendez_vous
-patient_db.patients (1) ──< (1) dossier_db.dossiers_medicaux
-
-rendezvous_db.medecins (1) ──< (N) rendezvous_db.rendez_vous
-rendezvous_db.medecins (1) ──< (N) dossier_db.consultations
-
-rendezvous_db.rendez_vous (1) ──< (0..1) dossier_db.consultations  (via rendez_vous_id)
-
-dossier_db.dossiers_medicaux (1) ──< (N) dossier_db.consultations
-dossier_db.dossiers_medicaux (1) ──< (N) dossier_db.documents
-
-dossier_db.consultations (1) ──< (N) dossier_db.prescriptions
-```
-
-Cette représentation peut servir de base pour dessiner un vrai **diagramme ERD** (Draw.io, dbdiagram.io, Lucidchart…) dans le rapport.
-
-### 🔍 Service Discovery
+## 🔍 Service Discovery
 
 Accéder à Eureka Dashboard : **http://localhost:8761**
 
 Vous verrez tous les services enregistrés.
 
-### 📝 Notes Importantes
+## 📝 Notes Importantes
 
 - **Tous les endpoints (sauf /auth/**) nécessitent un token JWT**
 - **Format du header :** `Authorization: Bearer VOTRE_TOKEN`
 - **Le token expire après 24 heures**
 - **Les services communiquent via Eureka Service Discovery**
+
+## 🐳 Docker
+
+```bash
+# Build et Run tous les services
+docker-compose up -d
+
+# Voir les logs
+docker-compose logs -f
+
+# Arrêter tous les services
+docker-compose down
+```
+
+## 👥 Auteurs
+
+ENSA Safi - Java Avancée - 4ème Année
+
+## 📄 Licence
+
+Ce projet est développé dans le cadre d'un projet académique.

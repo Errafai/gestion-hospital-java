@@ -17,11 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-/**
- * Service métier pour la gestion de l'authentification et de l'inscription des utilisateurs.
- * Contient la logique de création d'utilisateur et de génération de token JWT.
- */
 @Service
+/**
+ * Service gérant l'authentification et l'inscription des utilisateurs.
+ * Coordonne les interactions entre le repository, l'encodeur de mot de passe et le fournisseur de tokens.
+ */
 public class AuthService {
     
     @Autowired
@@ -38,20 +38,24 @@ public class AuthService {
     
     /**
      * Inscrit un nouvel utilisateur dans le système.
-     * - Vérifie l'unicité du username et de l'email.
-     * - Chiffre le mot de passe.
-     * - Sauvegarde l'utilisateur en base.
+     * Vérifie l'unicité du nom d'utilisateur et de l'email.
+     * @param request Les données d'inscription (nom, email, mot de passe...).
+     * @return L'utilisateur créé.
+     * @throws BadRequestException Si le nom d'utilisateur ou l'email existe déjà.
      */
     @Transactional
     public User register(RegisterRequest request) {
+        // Vérification de l'unicité du username
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new BadRequestException("Username is already taken!");
         }
         
+        // Vérification de l'unicité de l'email
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new BadRequestException("Email is already in use!");
         }
         
+        // Création de l'entité User
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -67,19 +71,24 @@ public class AuthService {
     }
     
     /**
-     * Authentifie un utilisateur existant.
-     * - Vérifie le couple username/password via Spring Security.
-     * - Génère un token JWT pour cet utilisateur.
-     * - Retourne le token et les informations de base (username, rôle).
+     * Authentifie un utilisateur et génère un token JWT.
+     * @param request Les identifiants de connexion (username, password).
+     * @return Une réponse contenant le token JWT et les infos de l'utilisateur.
+     * @throws BadRequestException Si les identifiants sont incorrects ou l'utilisateur non trouvé.
      */
     public JwtAuthenticationResponse login(LoginRequest request) {
+        // Authentification via Spring Security
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
         
+        // Mise à jour du contexte de sécurité
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        
+        // Génération du token JWT
         String jwt = tokenProvider.generateToken(authentication);
         
+        // Récupération des détails de l'utilisateur pour la réponse
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new BadRequestException("User not found"));
         

@@ -10,20 +10,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Contrôleur REST pour la gestion des médecins.
- * Accessible via l'API Gateway sous /api/medecins/**.
- */
 @RestController
 @RequestMapping("/medecins")
 @CrossOrigin(origins = "*")
+/**
+ * Contrôleur REST pour la gestion des médecins.
+ * Permet de rechercher et gérer les profils médecins.
+ */
 public class MedecinController {
     
     @Autowired
     private MedecinService medecinService;
     
     /**
-     * Récupère la liste de tous les médecins.
+     * Liste tous les médecins.
+     * @return Liste de DTOs.
      */
     @GetMapping
     public ResponseEntity<List<MedecinDTO>> getAllMedecins() {
@@ -32,7 +33,9 @@ public class MedecinController {
     }
     
     /**
-     * Récupère un médecin par son identifiant.
+     * Trouve un médecin par ID.
+     * @param id ID du médecin.
+     * @return DTO du médecin.
      */
     @GetMapping("/{id}")
     public ResponseEntity<MedecinDTO> getMedecinById(@PathVariable Long id) {
@@ -41,7 +44,9 @@ public class MedecinController {
     }
     
     /**
-     * Récupère les médecins filtrés par spécialité.
+     * Recherche par spécialité.
+     * @param specialite Spécialité médicale.
+     * @return Liste de médecins.
      */
     @GetMapping("/specialite/{specialite}")
     public ResponseEntity<List<MedecinDTO>> getMedecinsBySpecialite(@PathVariable String specialite) {
@@ -50,8 +55,7 @@ public class MedecinController {
     }
     
     /**
-     * (Placeholder) Endpoint prévu pour renvoyer les disponibilités d'un médecin.
-     * À implémenter ultérieurement si nécessaire.
+     * Placeholder pour la disponibilité (non implémenté).
      */
     @GetMapping("/{id}/disponibilites")
     public ResponseEntity<?> getMedecinDisponibilites(@PathVariable Long id) {
@@ -59,7 +63,9 @@ public class MedecinController {
     }
     
     /**
-     * Crée un nouveau médecin (lié à un user existant via userId).
+     * Crée un nouveau profil médecin.
+     * @param medecinDTO Données du médecin.
+     * @return Médecin créé.
      */
     @PostMapping
     public ResponseEntity<MedecinDTO> createMedecin(@Valid @RequestBody MedecinDTO medecinDTO) {
@@ -68,7 +74,10 @@ public class MedecinController {
     }
     
     /**
-     * Met à jour les informations d'un médecin.
+     * Met à jour un médecin.
+     * @param id ID du médecin.
+     * @param medecinDTO Nouvelles données.
+     * @return Médecin mis à jour.
      */
     @PutMapping("/{id}")
     public ResponseEntity<MedecinDTO> updateMedecin(@PathVariable Long id, 
@@ -78,7 +87,9 @@ public class MedecinController {
     }
     
     /**
-     * Supprime définitivement un médecin.
+     * Supprime un médecin.
+     * @param id ID du médecin.
+     * @return 204 No Content.
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMedecin(@PathVariable Long id) {

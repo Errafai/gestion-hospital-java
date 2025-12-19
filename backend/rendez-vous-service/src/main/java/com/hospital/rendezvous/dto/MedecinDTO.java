@@ -7,8 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Objet de transfert de données représentant un médecin côté API.
- * Utilisé pour échanger des informations entre le frontend et le service rendez-vous.
+ * DTO (Data Transfer Object) pour l'entité Médecin.
+ * Utilisé pour exposer les données des médecins via l'API.
  */
 @Data
 @NoArgsConstructor
@@ -16,38 +16,35 @@ import lombok.NoArgsConstructor;
 public class MedecinDTO {
     
     /**
-     * Identifiant technique du médecin (clé primaire côté base de données).
+     * Identifiant du médecin (optionnel à la création).
      */
     private Long id;
     
     /**
-     * Identifiant de l'utilisateur associé (dans le service d'authentification).
-     * Permet de lier le médecin à un compte User (login / mot de passe / rôle MEDECIN).
+     * ID de l'utilisateur associé. Obligatoire.
      */
     @NotNull(message = "User ID is required")
     private Long userId;
     
     /**
-     * Numéro d'inscription à l'ordre des médecins.
-     * Doit être unique pour chaque médecin.
+     * Numéro d'ordre. Unique et obligatoire.
      */
     @NotBlank(message = "Numéro ordre is required")
     private String numeroOrdre;
     
     /**
-     * Spécialité médicale du médecin (Cardiologie, Pédiatrie, etc.).
+     * Spécialité médicale. Obligatoire.
      */
     @NotBlank(message = "Spécialité is required")
     private String specialite;
     
     /**
-     * Numéro de téléphone professionnel du médecin.
+     * Numéro de téléphone.
      */
     private String telephone;
-
+    
     /**
-     * Indique si le médecin accepte actuellement de nouveaux rendez-vous
-     * (true = disponible, false = indisponible).
+     * Disponibilité du médecin.
      */
     private Boolean disponible;
 }

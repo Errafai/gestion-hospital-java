@@ -17,16 +17,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/**
- * Configuration Spring Security du service d'authentification.
- * Gère :
- * - l'encodage des mots de passe
- * - l'authentification via UserDetailsService
- * - le filtre JWT pour protéger les endpoints
- */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+/**
+ * Configuration principale de la sécurité Spring Security.
+ * Définit les règles de filtrage, l'encodeur de mot de passe et le gestionnaire d'authentification.
+ */
 public class SecurityConfig {
     
     @Autowired
@@ -36,7 +33,8 @@ public class SecurityConfig {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
     
     /**
-     * Déclare l'encodeur de mot de passe utilisé pour chiffrer les mots de passe utilisateurs (BCrypt).
+     * Bean pour l'encodage des mots de passe.
+     * Utilise BCrypt, un algorithme de hachage robuste.
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,7 +42,8 @@ public class SecurityConfig {
     }
     
     /**
-     * Provider d'authentification basé sur {@link UserDetailsServiceImpl} et BCrypt.
+     * Bean pour le fournisseur d'authentification.
+     * Connecte le service utilisateur et l'encodeur de mot de passe.
      */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -55,7 +54,7 @@ public class SecurityConfig {
     }
     
     /**
-     * Expose l'AuthenticationManager utilisé par le service pour authentifier les utilisateurs.
+     * Bean pour le gestionnaire d'authentification.
      */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
@@ -63,20 +62,21 @@ public class SecurityConfig {
     }
     
     /**
-     * Configuration globale de la sécurité HTTP :
-     * - Désactive le CSRF (API stateless)
-     * - Utilise des sessions stateless (basées sur JWT uniquement)
-     * - Autorise /auth/** et /actuator/** sans authentification
-     * - Protège toutes les autres routes avec le filtre JWT.
+     * Chaîne de filtres de sécurité.
+     * Configure :
+     * - Désactivation CSRF (car API REST Stateless)
+     * - Session Stateless (pas de session serveur)
+     * - Autorisations des routes (public vs authentifié)
+     * - Ajout du filtre JWT avant le filtre standard
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/actuator/**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/auth/**").permitAll() // Routes publiques (login, register)
+                .requestMatchers("/actuator/**").permitAll() // Endpoints de monitoring
+                .anyRequest().authenticated() // Tout le reste nécessite une authentification
             )
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

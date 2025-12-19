@@ -11,28 +11,29 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/**
- * Entité JPA représentant un patient dans la base de données {@code patient_db}.
- * Cette classe mappe la table {@code patients}.
- */
 @Entity
 @Table(name = "patients")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+/**
+ * Représente un patient dans le système hospitalier.
+ * Cette entité est mappée à la table "patients" dans la base de données.
+ */
 public class Patient {
     
     /**
-        * Identifiant technique du patient (clé primaire).
+     * Identifiant unique du patient (Clé Primaire).
+     * Généré automatiquement par la base de données.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     /**
-     * Numéro de dossier patient unique dans l'hôpital
-     * (exemple : PAT-001, PAT-2024-0001).
+     * Numéro unique d'identification du patient (ex: PAT-2023-0001).
+     * Doit être unique et non nul.
      */
     @Column(unique = true, nullable = false, length = 20)
     private String numeroPatient;
@@ -51,79 +52,80 @@ public class Patient {
     
     /**
      * Date de naissance du patient.
+     * Utilisé pour le calcul de l'âge.
      */
     @Column(nullable = false)
     private LocalDate dateNaissance;
     
     /**
-     * Sexe du patient (M ou F), stocké comme chaîne.
+     * Sexe du patient (M ou F).
+     * Stocké sous forme de chaîne de caractères (String).
      */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 1)
     private Sexe sexe;
     
     /**
-     * Numéro de carte d'identité nationale (optionnel) du patient.
+     * Carte d'Identité Nationale (CIN).
      * Doit être unique si renseigné.
      */
     @Column(unique = true, length = 20)
     private String cin;
     
     /**
-     * Numéro de téléphone du patient.
+     * Numéro de téléphone de contact.
      */
     @Column(length = 20)
     private String telephone;
     
     /**
-     * Adresse email du patient.
+     * Adresse email de contact.
      */
     @Column(length = 100)
     private String email;
     
     /**
-     * Adresse postale détaillée du patient.
+     * Adresse postale complète.
      */
     @Column(columnDefinition = "TEXT")
     private String adresse;
     
     /**
-     * Ville principale de résidence du patient.
+     * Ville de résidence.
      */
     @Column(length = 100)
     private String ville;
     
     /**
-     * Groupe sanguin du patient (A+, A-, B+, B-, AB+, AB-, O+, O-).
+     * Groupe sanguin (ex: A+, O-, etc.).
      */
     @Column(length = 5)
     private String groupeSanguin;
     
     /**
-     * Liste ou description des allergies connues du patient.
+     * Liste des allergies connues (texte libre).
      */
     @Column(columnDefinition = "TEXT")
     private String allergies;
     
     /**
-     * Date de création de l'enregistrement du patient.
-     * Gérée automatiquement par JPA (auditing).
+     * Date de création de l'enregistrement.
+     * Géré automatiquement par JPA Auditing.
      */
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
     
     /**
-     * Date de dernière mise à jour des informations du patient.
-     * Gérée automatiquement par JPA (auditing).
+     * Date de la dernière modification de l'enregistrement.
+     * Géré automatiquement par JPA Auditing.
      */
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
     
     /**
-     * Enumération des valeurs possibles pour le sexe du patient.
-     * M : Masculin, F : Féminin.
+     * Énumération pour le sexe du patient.
      */
     public enum Sexe {
         M, F

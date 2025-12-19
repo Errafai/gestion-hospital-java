@@ -5,34 +5,70 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Réponse renvoyée au frontend après une authentification réussie.
- * Contient le token JWT et quelques informations de base sur l'utilisateur connecté.
+ * DTO pour la réponse d'authentification.
+ * Renvoyé après une connexion réussie.
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class JwtAuthenticationResponse {
     /**
-     * Token JWT signé que le frontend doit renvoyer dans l'en-tête
-     * Authorization: Bearer &lt;token&gt; pour chaque requête protégée.
+     * Le token JWT généré.
      */
     private String token;
     
     /**
-     * Type du token renvoyé. Ici toujours "Bearer".
-     * Permet au frontend de construire facilement l'en-tête Authorization.
+     * Le type de token (par défaut "Bearer").
      */
     private String type = "Bearer";
     
     /**
-     * Nom d'utilisateur connecté (utile pour l'affichage côté UI).
+     * Le nom d'utilisateur authentifié.
      */
     private String username;
     
     /**
-     * Rôle de l'utilisateur connecté (ADMIN, MEDECIN, RECEPTIONNISTE).
-     * Permet au frontend d'afficher ou cacher certaines fonctionnalités.
+     * Le rôle de l'utilisateur.
      */
     private String role;
+
+    public JwtAuthenticationResponse() {
+    }
+
+    public JwtAuthenticationResponse(String token, String type, String username, String role) {
+        this.token = token;
+        this.type = type;
+        this.username = username;
+        this.role = role;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }
 

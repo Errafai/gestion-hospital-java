@@ -9,58 +9,57 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-/**
- * Entité JPA représentant un médecin dans la base {@code rendezvous_db}.
- * Elle est reliée à un utilisateur (service d'authentification) via {@code userId}.
- */
 @Entity
 @Table(name = "medecins")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+/**
+ * Entité représentant un médecin dans le système.
+ * Lié à un utilisateur (User) pour l'authentification.
+ */
 public class Medecin {
     
     /**
-     * Identifiant technique du médecin (clé primaire).
+     * Identifiant unique du médecin.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     /**
-     * Identifiant de l'utilisateur (entité User dans {@code auth_db}).
-     * Permet de lier les informations métier du médecin à son compte de connexion.
+     * ID de l'utilisateur associé (Compte d'authentification).
      */
     @Column(nullable = false)
     private Long userId;
     
     /**
-     * Numéro d'inscription à l'ordre des médecins (unique).
+     * Numéro d'ordre unique du médecin.
      */
     @Column(unique = true, nullable = false, length = 50)
     private String numeroOrdre;
     
     /**
-     * Spécialité médicale principale du médecin (ex : Cardiologie).
+     * Spécialité médicale (ex: Cardiologue, Généraliste).
      */
     @Column(nullable = false, length = 100)
     private String specialite;
     
     /**
-     * Numéro de téléphone professionnel du médecin.
+     * Numéro de téléphone professionnel.
      */
     @Column(length = 20)
     private String telephone;
     
     /**
-     * Indique si le médecin est actuellement disponible pour recevoir des rendez-vous.
+     * Indique si le médecin est disponible pour des consultations.
      */
     @Column(nullable = false)
     private Boolean disponible = true;
     
     /**
-     * Date de création de la fiche médecin (gérée automatiquement).
+     * Date de création du profil médecin.
      */
     @CreatedDate
     @Column(nullable = false, updatable = false)

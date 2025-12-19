@@ -11,13 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Contrôleur REST du service d'authentification.
- * Expose les endpoints utilisés par le frontend pour s'enregistrer et se connecter.
- */
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin(origins = "*")
+/**
+ * Contrôleur REST pour la gestion de l'authentification.
+ * Expose les endpoints publics pour l'inscription et la connexion.
+ */
 public class AuthController {
     
     @Autowired
@@ -25,7 +25,9 @@ public class AuthController {
     
     /**
      * Endpoint d'inscription d'un nouvel utilisateur.
-     * Le frontend envoie les informations dans {@link RegisterRequest}.
+     * Accessible publiquement.
+     * @param request Données de l'utilisateur.
+     * @return L'utilisateur créé avec le statut 201 Created.
      */
     @PostMapping("/register")
     public ResponseEntity<User> register(@Valid @RequestBody RegisterRequest request) {
@@ -35,8 +37,9 @@ public class AuthController {
     
     /**
      * Endpoint de connexion.
-     * - Entrée : {@link LoginRequest} (username + password)
-     * - Sortie : {@link JwtAuthenticationResponse} contenant le token JWT.
+     * Authentifie l'utilisateur et retourne un token JWT.
+     * @param request Identifiants de connexion.
+     * @return Le token JWT et les rôles.
      */
     @PostMapping("/login")
     public ResponseEntity<JwtAuthenticationResponse> login(@Valid @RequestBody LoginRequest request) {
@@ -45,8 +48,7 @@ public class AuthController {
     }
     
     /**
-     * (Placeholder) Endpoint prévu pour rafraîchir un token JWT.
-     * À implémenter si besoin dans une version ultérieure.
+     * Endpoint pour rafraîchir le token (Non implémenté).
      */
     @PostMapping("/refresh")
     public ResponseEntity<String> refresh() {
@@ -54,8 +56,7 @@ public class AuthController {
     }
     
     /**
-     * (Placeholder) Endpoint pour récupérer les informations de l'utilisateur connecté.
-     * À compléter pour renvoyer un vrai objet User/Profil.
+     * Endpoint pour récupérer les infos de l'utilisateur courant (Exemple).
      */
     @GetMapping("/me")
     public ResponseEntity<String> getCurrentUser() {
@@ -63,8 +64,7 @@ public class AuthController {
     }
     
     /**
-     * (Placeholder) Endpoint de déconnexion.
-     * Actuellement purement informatif (aucune invalidation de token côté serveur).
+     * Endpoint de déconnexion (Côté client principalement, car JWT est stateless).
      */
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
