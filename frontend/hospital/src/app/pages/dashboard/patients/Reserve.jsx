@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import ReserveHero from '../../components/fundamentalPages/reserve/ReserveHero'
-import AppointmentForm from '../../components/appointments/AppointmentForm'
-import Alert from '../../components/shared/Alert'
+import ReserveHero from '../../../components/dashboard/patients/reserve/ReserveHero'
+import AppointmentForm from '../../../components/appointments/AppointmentForm'
+import Alert from '../../../components/shared/Alert'
 
 export default function Reserve() {
   const [appointmentSuccess, setAppointmentSuccess] = useState(false)

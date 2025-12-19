@@ -1,5 +1,5 @@
 import React from "react";
-import reserve from "../../../../assets/images/reserve.jpg";
+import reserve from "../../../../../assets/images/reserve.jpg";
 import { Bed, FileX, LetterText, Phone } from "lucide-react";
 
 export default function ReserveHero() {

@@ -1,6 +1,8 @@
 import React from 'react'
 import { ContactHero, ContactInfo, ContactForm } from '../../components/fundamentalPages/contact'
 import { Clock, MessageSquare, CheckCircle } from 'lucide-react'
+import Navbar from '../../components/layout/Navbar'
+import Footer from '../../components/layout/Footer'
 
 export const Contact = () => {
   const benefits = [
@@ -11,6 +13,7 @@ export const Contact = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      <Navbar/>
       <ContactHero />
       
       {/* Benefits Section */}
@@ -84,6 +87,7 @@ export const Contact = () => {
           </button>
         </div>
       </div>
+      <Footer/>
     </div>
   )
 }

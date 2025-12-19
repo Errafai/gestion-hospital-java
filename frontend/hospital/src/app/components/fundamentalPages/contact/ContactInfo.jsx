@@ -42,7 +42,7 @@ export const ContactInfo = () => {
           <div className="mt-12">
             <h3 className="text-2xl font-bold text-gray-800 mb-6">Hours of Operation</h3>
             <div className="space-y-3 bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
-              <div className="flex justify-between items-center pb-3 border-b border-blue-200">
+w              <div className="flex justify-between items-center pb-3 border-b border-blue-200">
                 <span className="font-semibold text-gray-800">Monday - Friday:</span>
                 <span className="text-gray-700">8:00 AM - 6:00 PM</span>
               </div>
