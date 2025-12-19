@@ -12,8 +12,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+/**
+ * Gestionnaire global des exceptions pour le service d'authentification.
+ * Centralise la gestion des erreurs et uniformise les réponses API.
+ */
 public class GlobalExceptionHandler {
     
+    /**
+     * Gère les exceptions BadRequestException.
+     * @param ex L'exception levée.
+     * @return Réponse HTTP 400 avec détails.
+     */
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException ex) {
         ErrorResponse error = new ErrorResponse(
@@ -25,6 +34,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
     
+    /**
+     * Gère les erreurs de validation des DTOs (@Valid).
+     * @param ex Exception contenant les erreurs de validation.
+     * @return Réponse HTTP 400 avec la liste des champs invalides.
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -43,9 +57,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
     
+    /**
+     * Gestionnaire par défaut pour toutes les autres exceptions.
+     * @param ex L'exception inattendue.
+     * @return Réponse HTTP 500.
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
-        ex.printStackTrace(); // Add this line to see the error in the console
+        ex.printStackTrace(); // Log l'erreur pour le débogage
         ErrorResponse error = new ErrorResponse(
             LocalDateTime.now(),
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -55,6 +74,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
+    /**
+     * Record interne pour structurer la réponse d'erreur.
+     */
     public record ErrorResponse(
         LocalDateTime timestamp,
         int status,

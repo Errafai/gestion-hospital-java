@@ -11,36 +11,31 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-/**
- * Composant responsable de la génération et de la validation des tokens JWT.
- * Utilisé par le service d'authentification et le filtre de sécurité.
- */
 @Component
+/**
+ * Utilitaire pour la gestion des tokens JWT.
+ * Responsable de la génération, de la validation et de l'extraction d'informations des tokens.
+ */
 public class JwtTokenProvider {
     
-    /**
-     * Clé secrète utilisée pour signer les tokens JWT.
-     * Valeur fournie dans le fichier de configuration (application.yml).
-     */
     @Value("${jwt.secret}")
     private String jwtSecret;
     
-    /**
-     * Durée de validité du token (en millisecondes).
-     */
     @Value("${jwt.expiration}")
     private long jwtExpirationMs;
     
     /**
-     * Construit la clé de signature à partir de la chaîne secrète.
+     * Obtenir la clé de signature HMAC.
+     * @return La clé secrète générée à partir de la configuration.
      */
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
     
     /**
-     * Génère un token JWT à partir d'une authentification réussie.
-     * Le username de l'utilisateur est stocké dans le "subject" du token.
+     * Génère un token JWT pour une authentification donnée.
+     * @param authentication L'objet authentification contenant les détails de l'utilisateur.
+     * @return Le token JWT sous forme de String.
      */
     public String generateToken(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -56,7 +51,9 @@ public class JwtTokenProvider {
     }
     
     /**
-     * Extrait le nom d'utilisateur (subject) à partir d'un token JWT valide.
+     * Extrait le nom d'utilisateur (sujet) du token JWT.
+     * @param token Le token JWT.
+     * @return Le nom d'utilisateur.
      */
     public String getUsernameFromToken(String token) {
         Claims claims = Jwts.parser()
@@ -69,7 +66,10 @@ public class JwtTokenProvider {
     }
     
     /**
-     * Vérifie la validité d'un token JWT (signature, format, expiration).
+     * Valide un token JWT.
+     * Vérifie la signature et la validité du token.
+     * @param token Le token à valider.
+     * @return true si le token est valide, false sinon.
      */
     public boolean validateToken(String token) {
         try {

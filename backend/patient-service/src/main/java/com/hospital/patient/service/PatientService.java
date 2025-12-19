@@ -15,40 +15,77 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+/**
+ * Service gérant la logique métier pour les patients.
+ * Fournit les méthodes pour créer, lire, mettre à jour et supprimer des patients.
+ */
 public class PatientService {
     
     @Autowired
     private PatientRepository patientRepository;
     
+    /**
+     * Récupère la liste de tous les patients.
+     * @return Une liste de DTOs représentant tous les patients.
+     */
     public List<PatientDTO> getAllPatients() {
         return patientRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
     
+    /**
+     * Récupère une page de patients (pagination).
+     * @param pageable Les informations de pagination.
+     * @return Une page de DTOs.
+     */
     public Page<PatientDTO> getAllPatients(Pageable pageable) {
         return patientRepository.findAll(pageable)
                 .map(this::convertToDTO);
     }
     
+    /**
+     * Récupère un patient par son ID technique.
+     * @param id L'identifiant du patient.
+     * @return Le DTO du patient trouvé.
+     * @throws ResourceNotFoundException si le patient n'existe pas.
+     */
     public PatientDTO getPatientById(Long id) {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Patient", "id", id));
         return convertToDTO(patient);
     }
     
+    /**
+     * Récupère un patient par son numéro unique.
+     * @param numero Le numéro de patient.
+     * @return Le DTO du patient trouvé.
+     * @throws ResourceNotFoundException si le patient n'existe pas.
+     */
     public PatientDTO getPatientByNumero(String numero) {
         Patient patient = patientRepository.findByNumeroPatient(numero)
                 .orElseThrow(() -> new ResourceNotFoundException("Patient", "numeroPatient", numero));
         return convertToDTO(patient);
     }
     
+    /**
+     * Recherche des patients selon une chaîne de caractères.
+     * @param query La requête de recherche (nom, prénom, CIN...).
+     * @return Une liste de DTOs correspondants.
+     */
     public List<PatientDTO> searchPatients(String query) {
         return patientRepository.searchPatients(query).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
     
+    /**
+     * Crée un nouveau patient dans le système.
+     * Vérifie l'unicité du numéro de patient et de la CIN avant insertion.
+     * @param patientDTO Les données du patient à créer.
+     * @return Le DTO du patient créé.
+     * @throws BadRequestException si le numéro ou la CIN existe déjà.
+     */
     @Transactional
     public PatientDTO createPatient(PatientDTO patientDTO) {
         if (patientRepository.existsByNumeroPatient(patientDTO.getNumeroPatient())) {
@@ -66,6 +103,14 @@ public class PatientService {
         return convertToDTO(patient);
     }
     
+    /**
+     * Met à jour les informations d'un patient existant.
+     * @param id L'identifiant du patient à modifier.
+     * @param patientDTO Les nouvelles données.
+     * @return Le DTO mis à jour.
+     * @throws ResourceNotFoundException si le patient n'est pas trouvé.
+     * @throws BadRequestException si les nouvelles données violent l'unicité (numéro, CIN).
+     */
     @Transactional
     public PatientDTO updatePatient(Long id, PatientDTO patientDTO) {
         Patient patient = patientRepository.findById(id)
@@ -101,6 +146,11 @@ public class PatientService {
         return convertToDTO(patient);
     }
     
+    /**
+     * Supprime un patient par son ID.
+     * @param id L'identifiant du patient à supprimer.
+     * @throws ResourceNotFoundException si le patient n'existe pas.
+     */
     @Transactional
     public void deletePatient(Long id) {
         Patient patient = patientRepository.findById(id)

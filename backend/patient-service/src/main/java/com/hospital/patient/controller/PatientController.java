@@ -13,22 +13,23 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Contrôleur REST pour la gestion des patients.
- * Tous les endpoints sont exposés via l'API Gateway sous /api/patients/**.
- */
 @RestController
 @RequestMapping("/patients")
 @CrossOrigin(origins = "*")
+/**
+ * Contrôleur REST pour la gestion des patients.
+ * Expose les endpoints pour les opérations CRUD et la recherche.
+ */
 public class PatientController {
     
     @Autowired
     private PatientService patientService;
     
     /**
-     * Récupère la liste des patients.
-     * - Si les paramètres page/size sont fournis (>=0 et >0), renvoie une page.
-     * - Sinon, renvoie la liste complète.
+     * Récupère la liste des patients avec pagination optionnelle.
+     * @param page Numéro de la page (0 par défaut).
+     * @param size Taille de la page (10 par défaut).
+     * @return Une liste ou une page de patients.
      */
     @GetMapping
     public ResponseEntity<?> getAllPatients(
@@ -45,7 +46,9 @@ public class PatientController {
     }
     
     /**
-     * Récupère les détails d'un patient par son identifiant technique.
+     * Récupère un patient par son ID.
+     * @param id L'identifiant du patient.
+     * @return Le patient trouvé ou 404 Not Found.
      */
     @GetMapping("/{id}")
     public ResponseEntity<PatientDTO> getPatientById(@PathVariable Long id) {
@@ -54,7 +57,9 @@ public class PatientController {
     }
     
     /**
-     * Récupère un patient à partir de son numéro de patient (référence métier).
+     * Récupère un patient par son numéro unique.
+     * @param numero Le numéro du patient.
+     * @return Le patient trouvé ou 404 Not Found.
      */
     @GetMapping("/numero/{numero}")
     public ResponseEntity<PatientDTO> getPatientByNumero(@PathVariable String numero) {
@@ -63,7 +68,9 @@ public class PatientController {
     }
     
     /**
-     * Recherche des patients par mot-clé (nom, prénom, etc.).
+     * Recherche des patients par mots-clés.
+     * @param q Le terme de recherche.
+     * @return Une liste de patients correspondants.
      */
     @GetMapping("/search")
     public ResponseEntity<List<PatientDTO>> searchPatients(@RequestParam String q) {
@@ -73,7 +80,8 @@ public class PatientController {
     
     /**
      * Crée un nouveau patient.
-     * - Vérifie l'unicité du numéro de patient et du CIN (si renseigné).
+     * @param patientDTO Les données du patient.
+     * @return Le patient créé avec le statut 201 Created.
      */
     @PostMapping
     public ResponseEntity<PatientDTO> createPatient(@Valid @RequestBody PatientDTO patientDTO) {
@@ -82,7 +90,10 @@ public class PatientController {
     }
     
     /**
-     * Met à jour les informations d'un patient existant.
+     * Met à jour un patient existant.
+     * @param id L'identifiant du patient.
+     * @param patientDTO Les nouvelles données.
+     * @return Le patient mis à jour.
      */
     @PutMapping("/{id}")
     public ResponseEntity<PatientDTO> updatePatient(@PathVariable Long id, 
@@ -92,7 +103,9 @@ public class PatientController {
     }
     
     /**
-     * Supprime définitivement un patient de la base de données.
+     * Supprime un patient.
+     * @param id L'identifiant du patient.
+     * @return 204 No Content en cas de succès.
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePatient(@PathVariable Long id) {

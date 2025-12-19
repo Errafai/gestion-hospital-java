@@ -15,17 +15,29 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Service
+/**
+ * Implémentation de UserDetailsService pour charger les données utilisateur depuis la base de données.
+ * Utilisé par Spring Security pour l'authentification.
+ */
 public class UserDetailsServiceImpl implements UserDetailsService {
     
     @Autowired
     private UserRepository userRepository;
     
+    /**
+     * Charge un utilisateur par son nom d'utilisateur.
+     * Vérifie également si le compte est actif.
+     * @param username Le nom d'utilisateur.
+     * @return L'objet UserDetails de Spring Security.
+     * @throws UsernameNotFoundException Si l'utilisateur n'est pas trouvé ou est inactif.
+     */
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
         
+        // Sécurité supplémentaire : Empêcher la connexion des comptes inactifs
         if (!user.getActif()) {
             throw new UsernameNotFoundException("User is inactive");
         }
@@ -41,6 +53,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .build();
     }
     
+    /**
+     * Convertit le rôle de l'utilisateur en authority Spring Security.
+     */
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }

@@ -13,35 +13,65 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+/**
+ * Service gérant la logique métier pour les médecins.
+ * Permet de gérer la disponibilité, la création de profils et la recherche.
+ */
 public class MedecinService {
     
     @Autowired
     private MedecinRepository medecinRepository;
     
+    /**
+     * Récupère la liste de tous les médecins.
+     * @return Liste de DTOs.
+     */
     public List<MedecinDTO> getAllMedecins() {
         return medecinRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
     
+    /**
+     * Récupère un médecin par son ID.
+     * @param id Identifiant du médecin.
+     * @return Le DTO du médecin trouvé.
+     * @throws ResourceNotFoundException Si le médecin n'existe pas.
+     */
     public MedecinDTO getMedecinById(Long id) {
         Medecin medecin = medecinRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Medecin", "id", id));
         return convertToDTO(medecin);
     }
     
+    /**
+     * Recherche les médecins par spécialité.
+     * @param specialite La spécialité recherchée.
+     * @return Liste des médecins correspondants.
+     */
     public List<MedecinDTO> getMedecinsBySpecialite(String specialite) {
         return medecinRepository.findBySpecialite(specialite).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
     
+    /**
+     * Récupère uniquement les médecins disponibles.
+     * @return Liste des médecins disponibles.
+     */
     public List<MedecinDTO> getAvailableMedecins() {
         return medecinRepository.findByDisponible(true).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
     
+    /**
+     * Crée un nouveau profil médecin.
+     * Vérifie l'unicité du numéro d'ordre et si l'utilisateur a déjà un profil.
+     * @param medecinDTO Les données du médecin.
+     * @return Le médecin créé.
+     * @throws BadRequestException Si le numéro d'ordre existe ou l'utilisateur est déjà médecin.
+     */
     @Transactional
     public MedecinDTO createMedecin(MedecinDTO medecinDTO) {
         if (medecinRepository.existsByNumeroOrdre(medecinDTO.getNumeroOrdre())) {
@@ -63,6 +93,12 @@ public class MedecinService {
         return convertToDTO(medecin);
     }
     
+    /**
+     * Met à jour les informations d'un médecin.
+     * @param id L'identifiant du médecin.
+     * @param medecinDTO Les nouvelles données.
+     * @return Le médecin mis à jour.
+     */
     @Transactional
     public MedecinDTO updateMedecin(Long id, MedecinDTO medecinDTO) {
         Medecin medecin = medecinRepository.findById(id)
@@ -85,6 +121,10 @@ public class MedecinService {
         return convertToDTO(medecin);
     }
     
+    /**
+     * Supprime un médecin.
+     * @param id L'identifiant du médecin.
+     */
     @Transactional
     public void deleteMedecin(Long id) {
         Medecin medecin = medecinRepository.findById(id)

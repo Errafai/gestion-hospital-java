@@ -12,8 +12,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+/**
+ * Gestionnaire global des exceptions pour le service Patient.
+ * Intercepte les exceptions lancées par les contrôleurs et retourne des réponses JSON structurées.
+ */
 public class GlobalExceptionHandler {
     
+    /**
+     * Gère l'exception ResourceNotFoundException.
+     * Retourne une réponse 404 Not Found.
+     * @param ex L'exception capturée.
+     * @return Une réponse d'erreur structurée.
+     */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
         ErrorResponse error = new ErrorResponse(
@@ -25,6 +35,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
     
+    /**
+     * Gère l'exception BadRequestException.
+     * Retourne une réponse 400 Bad Request.
+     * @param ex L'exception capturée.
+     * @return Une réponse d'erreur structurée.
+     */
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException ex) {
         ErrorResponse error = new ErrorResponse(
@@ -36,6 +52,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
     
+    /**
+     * Gère les exceptions de validation des arguments (MethodArgumentNotValidException).
+     * Retourne une liste des champs invalides avec leurs messages d'erreur.
+     * @param ex L'exception de validation.
+     * @return Une map contenant les erreurs de validation par champ.
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -54,6 +76,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
     
+    /**
+     * Gère toutes les autres exceptions non interceptées (Fallback).
+     * Retourne une réponse 500 Internal Server Error.
+     * @param ex L'exception capturée.
+     * @return Une réponse d'erreur générique.
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
         ErrorResponse error = new ErrorResponse(
@@ -65,6 +93,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
+    /**
+     * Structure standard pour les réponses d'erreur.
+     */
     public record ErrorResponse(
         LocalDateTime timestamp,
         int status,

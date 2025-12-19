@@ -9,84 +9,83 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-/**
- * Objet de transfert de données utilisé entre le backend et le frontend
- * pour représenter un patient sans exposer directement l'entité JPA.
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * Objet de Transfert de Données (DTO) pour l'entité Patient.
+ * Utilisé pour exposer les données du patient via l'API REST.
+ * Contient des annotations de validation pour assurer l'intégrité des données reçues.
+ */
 public class PatientDTO {
     
     /**
-     * Identifiant technique du patient (généré par la base).
+     * Identifiant technique du patient.
      */
     private Long id;
     
     /**
-     * Numéro unique attribué au patient par l'hôpital
-     * (utilisé comme identifiant métier).
+     * Numéro unique du patient. Obligatoire.
      */
     @NotBlank(message = "Numéro patient is required")
     private String numeroPatient;
     
     /**
-     * Nom de famille du patient.
+     * Nom du patient. Obligatoire.
      */
     @NotBlank(message = "Nom is required")
     private String nom;
     
     /**
-     * Prénom du patient.
+     * Prénom du patient. Obligatoire.
      */
     @NotBlank(message = "Prénom is required")
     private String prenom;
     
     /**
-     * Date de naissance du patient (format ISO : yyyy-MM-dd).
+     * Date de naissance. Obligatoire.
      */
     @NotNull(message = "Date de naissance is required")
     private LocalDate dateNaissance;
     
     /**
-     * Sexe du patient (M ou F) défini par l'enum {@link Patient.Sexe}.
+     * Sexe du patient (M/F). Obligatoire.
      */
     @NotNull(message = "Sexe is required")
     private Patient.Sexe sexe;
     
     /**
-     * Numéro de CIN (facultatif) du patient.
-     * Doit être unique si renseigné.
+     * Carte d'identité nationale.
      */
     private String cin;
     
     /**
-     * Numéro de téléphone du patient.
+     * Numéro de téléphone.
      */
     private String telephone;
     
     /**
-     * Adresse email du patient.
+     * Adresse Email.
      */
     private String email;
     
     /**
-     * Adresse postale complète du patient.
+     * Adresse physique.
      */
     private String adresse;
     
     /**
-     * Ville de résidence du patient.
+     * Ville de résidence.
      */
     private String ville;
     
     /**
-     * Groupe sanguin du patient (ex : A+, O-, etc.).
+     * Groupe sanguin.
      */
     private String groupeSanguin;
     
     /**
-     * Informations sur les allergies connues du patient.
+     * Allergies connues.
      */
     private String allergies;
 }

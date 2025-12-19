@@ -7,8 +7,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+/**
+ * Repository pour l'entité Prescription.
+ */
 public interface PrescriptionRepository extends JpaRepository<Prescription, Long> {
     
+    /**
+     * Trouve les prescriptions associées à une consultation.
+     * @param consultationId ID de la consultation.
+     * @return Liste des prescriptions.
+     */
     List<Prescription> findByConsultationId(Long consultationId);
 }
 

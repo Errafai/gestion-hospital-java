@@ -5,46 +5,76 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Objet de transfert de données pour représenter un dossier médical
- * côté API sans exposer directement l'entité JPA.
- */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class DossierMedicalDTO {
     
-    /**
-     * Identifiant technique du dossier médical (clé primaire).
-     */
     private Long id;
     
-    /**
-     * Identifiant du patient auquel appartient ce dossier médical.
-     * Correspond à l'id d'un patient dans le service patient.
-     */
     @NotNull(message = "Patient ID is required")
     private Long patientId;
     
-    /**
-     * Numéro de dossier médical (référence métier visible côté utilisateur).
-     * Peut être fourni par le frontend ou généré automatiquement côté backend.
-     */
     private String numeroDossier;
-    
-    /**
-     * Antécédents médicaux du patient (maladies chroniques, pathologies…).
-     */
     private String antecedentsMedicaux;
-    
-    /**
-     * Antécédents chirurgicaux du patient (opérations passées).
-     */
     private String antecedentsChirurgicaux;
-    
-    /**
-     * Antécédents familiaux (maladies héréditaires, antécédents familiaux).
-     */
     private String antecedentsFamiliaux;
+
+    public DossierMedicalDTO() {
+    }
+
+    public DossierMedicalDTO(Long id, Long patientId, String numeroDossier, String antecedentsMedicaux, String antecedentsChirurgicaux, String antecedentsFamiliaux) {
+        this.id = id;
+        this.patientId = patientId;
+        this.numeroDossier = numeroDossier;
+        this.antecedentsMedicaux = antecedentsMedicaux;
+        this.antecedentsChirurgicaux = antecedentsChirurgicaux;
+        this.antecedentsFamiliaux = antecedentsFamiliaux;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
+    }
+
+    public String getNumeroDossier() {
+        return numeroDossier;
+    }
+
+    public void setNumeroDossier(String numeroDossier) {
+        this.numeroDossier = numeroDossier;
+    }
+
+    public String getAntecedentsMedicaux() {
+        return antecedentsMedicaux;
+    }
+
+    public void setAntecedentsMedicaux(String antecedentsMedicaux) {
+        this.antecedentsMedicaux = antecedentsMedicaux;
+    }
+
+    public String getAntecedentsChirurgicaux() {
+        return antecedentsChirurgicaux;
+    }
+
+    public void setAntecedentsChirurgicaux(String antecedentsChirurgicaux) {
+        this.antecedentsChirurgicaux = antecedentsChirurgicaux;
+    }
+
+    public String getAntecedentsFamiliaux() {
+        return antecedentsFamiliaux;
+    }
+
+    public void setAntecedentsFamiliaux(String antecedentsFamiliaux) {
+        this.antecedentsFamiliaux = antecedentsFamiliaux;
+    }
 }
 
