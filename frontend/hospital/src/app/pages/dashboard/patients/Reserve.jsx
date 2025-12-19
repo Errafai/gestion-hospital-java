@@ -26,7 +26,7 @@ export default function Reserve() {
 
   return (
     <div>
-      <ReserveHero />
+      {/* <ReserveHero /> */}
       
       <div className="py-12 bg-gray-50">
         <div className="container mx-auto px-4 flex flex-col items-center">

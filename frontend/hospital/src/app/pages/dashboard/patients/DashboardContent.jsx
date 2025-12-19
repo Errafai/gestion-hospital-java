@@ -2,6 +2,7 @@ import React from 'react'
 import OverviewPage from './OverviewPage'
 import AppointementsPage from './AppointementsPage'
 import AnanlysisPage from './AnanlysisPage'
+import Reserve from './Reserve'
 
 export const DashboardContent = ({ activeTab = 'overview' }) => {
     return (
@@ -9,7 +10,7 @@ export const DashboardContent = ({ activeTab = 'overview' }) => {
             {activeTab === 'overview' && <OverviewPage />}
             {activeTab === 'appointments' && <AppointementsPage />}
             {activeTab === 'analysis' && <AnanlysisPage />}
-            {activeTab === 'reserve' && <div><h2>Reserve Page - Coming Soon</h2></div>}
+            {activeTab === 'reserve' && <Reserve/>}
             {activeTab === 'health' && <div><h2>Health Page - Coming Soon</h2></div>}
             {activeTab === 'advices' && <div><h2>Advices Page - Coming Soon</h2></div>}
         </div>

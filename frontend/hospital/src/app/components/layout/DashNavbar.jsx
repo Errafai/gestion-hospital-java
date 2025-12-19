@@ -1,17 +1,10 @@
 import { NavLink } from "react-router-dom";
 import { Menu, PersonStanding, StickerIcon, User, X } from "lucide-react";
 import { navDashboard } from "../../routes/map";
-// import logo from "../../../assets/images/hospital-building.png";
 import { useState } from "react";
 
 export const DashNavbar = () => {
-  //   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  //   const handleNavClick = (to) => {
-  //     navigate(to);
-  //     setIsMenuOpen(false);
-  //   };
 
   const buttonBase =
     "bg-gradient-to-r from-red-400 to-pink-600 px-2 py-2 rounded-lg hover:animate-bounce transition-all";
