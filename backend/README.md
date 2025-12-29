@@ -1,198 +1,48 @@
-# 🏥 Hospital Management System - Architecture Microservices
+# Backend hospital
 
-Système de gestion hospitalière développé avec **Spring Boot 3.x** et **Architecture Microservices**.
+Backend Spring Boot 
 
-## 📋 Description
+- Java 17
+- Maven
+- MySQL
 
-Backend REST API en architecture microservices pour un système de gestion hospitalière complet incluant :
-- Gestion des patients
-- Gestion des médecins
-- Gestion des rendez-vous
-- Gestion des dossiers médicaux
-- Gestion des consultations
-- Authentification JWT avec rôles (Admin, Médecin, Réceptionniste)
+## Installation
 
-## 🏗️ Architecture Microservices
 
-Le système est composé de **6 services** :
+Configurer la base de données MySQL :
+   - Créer une base de données nommée `hospital_db`.
+   - Vérifier les identifiants dans `src/main/resources/application.properties` (défaut: root / password).
+Compiler le projet :
+	method 1 with intellij:
+		maven-->hospital-backend-->Lifecycle-->clean(double clique) after build success double click install
+		and run BackendApplication sur src\main\java\com\hospital
+	method 2 with terminal:
+  		mvn clean install
+   		mvn spring-boot:run
+	L'application sera accessible sur http://localhost:8080 
+	puis aller à http://localhost:8080/swagger-ui/index.html pour documentation API
+  
 
-1. **Eureka Server** (Port 8761) - Service Discovery
-2. **API Gateway** (Port 8080) - Point d'entrée unique
-3. **Auth Service** (Port 8081) - Authentification et gestion des utilisateurs
-4. **Patient Service** (Port 8082) - Gestion des patients
-5. **Rendez-vous Service** (Port 8083) - Gestion des rendez-vous et médecins
-6. **Dossier Service** (Port 8084) - Gestion des dossiers médicaux et consultations
+## Utilisateurs par défaut
 
-## 🛠️ Technologies
+Au premier démarrage, les utilisateurs suivants sont créés :
+- **Admin**: admin / admin123
+- **Médecin**: doctor1 / doctor123
 
-- **Java 17**
-- **Spring Boot 3.2.0**
-- **Spring Cloud** (Eureka, Gateway)
-- **Spring Security** (JWT Authentication)
-- **Spring Data JPA**
-- **MySQL 8.x**
-- **Maven**
-- **Docker**
+## Structure du Projet
 
-## 📁 Structure du Projet
+- `src/main/java/com/hospital` : Code source
+  - `config` : Configurations (Security, Swagger, CORS)
+  - `controller` : Points d'entrée de l'API REST
+  - `dto` : Objets de transfert de données
+  - `entity` : Entités JPA
+  - `service` : Logique métier
+  - `repository` : Accès aux données
+  - `security` : Gestion JWT et authentification
+  - `exception` : Gestion globale des erreurs
 
-```
-hospital-microservices/
-├── pom.xml                          # Parent POM
-├── docker-compose.yml               # Orchestration Docker
-├── eureka-server/                   # Service Discovery
-├── api-gateway/                     # API Gateway
-├── auth-service/                    # Service d'authentification
-├── patient-service/                 # Service Patients
-├── rendez-vous-service/             # Service Rendez-vous
-└── dossier-service/                 # Service Dossiers
-```
+## Sécurité
 
-## 🚀 Installation et Démarrage
-
-### Prérequis
-
-- Java 17+
-- Maven 3.6+
-- MySQL 8.x
-- Docker (optionnel)
-
-### Configuration
-
-1. **Créer les bases de données MySQL :**
-```sql
-CREATE DATABASE auth_db;
-CREATE DATABASE patient_db;
-CREATE DATABASE rendezvous_db;
-CREATE DATABASE dossier_db;
-```
-
-2. **Configurer les paramètres** dans chaque `application.yml` si nécessaire
-
-### Démarrage des Services
-
-**Ordre de démarrage recommandé :**
-
-1. **Eureka Server** (d'abord)
-```bash
-cd eureka-server
-mvn spring-boot:run
-```
-
-2. **Auth Service**
-```bash
-cd auth-service
-mvn spring-boot:run
-```
-
-3. **Patient Service**
-```bash
-cd patient-service
-mvn spring-boot:run
-```
-
-4. **Rendez-vous Service**
-```bash
-cd rendez-vous-service
-mvn spring-boot:run
-```
-
-5. **Dossier Service**
-```bash
-cd dossier-service
-mvn spring-boot:run
-```
-
-6. **API Gateway** (en dernier)
-```bash
-cd api-gateway
-mvn spring-boot:run
-```
-
-### Démarrage avec Docker
-
-```bash
-docker-compose up -d
-```
-
-## 📡 API Endpoints (via API Gateway)
-
-Tous les endpoints sont accessibles via l'API Gateway sur le port **8080** :
-
-### Authentification
-- `POST /api/auth/register` - Inscription
-- `POST /api/auth/login` - Connexion
-
-### Patients
-- `GET /api/patients` - Liste des patients
-- `GET /api/patients/{id}` - Détails d'un patient
-- `GET /api/patients/search?q={query}` - Recherche
-- `POST /api/patients` - Créer un patient
-- `PUT /api/patients/{id}` - Modifier un patient
-- `DELETE /api/patients/{id}` - Supprimer un patient
-
-### Rendez-vous
-- `GET /api/rendez-vous` - Liste des rendez-vous
-- `GET /api/rendez-vous/patient/{patientId}` - Par patient
-- `GET /api/rendez-vous/medecin/{medecinId}` - Par médecin
-- `POST /api/rendez-vous` - Créer un rendez-vous
-- `PUT /api/rendez-vous/{id}` - Modifier un rendez-vous
-
-### Dossiers Médicaux
-- `GET /api/dossiers/{id}` - Détails d'un dossier
-- `GET /api/dossiers/patient/{patientId}` - Par patient
-- `GET /api/dossiers/{id}/consultations` - Consultations
-- `POST /api/dossiers` - Créer un dossier
-
-### Consultations
-- `GET /api/consultations/{id}` - Détails d'une consultation
-- `POST /api/consultations` - Créer une consultation
-- `PUT /api/consultations/{id}` - Modifier une consultation
-
-## 🔐 Sécurité
-
-- Authentification JWT via Auth Service
-- Rôles : ADMIN, MEDECIN, RECEPTIONNISTE
-- API Gateway route les requêtes vers les services appropriés
-
-## 🗄️ Bases de Données
-
-Chaque service a sa propre base de données :
-- `auth_db` - Users
-- `patient_db` - Patients
-- `rendezvous_db` - Rendez-vous, Médecins
-- `dossier_db` - Dossiers médicaux, Consultations, Prescriptions, Documents
-
-## 🔍 Service Discovery
-
-Accéder à Eureka Dashboard : **http://localhost:8761**
-
-Vous verrez tous les services enregistrés.
-
-## 📝 Notes Importantes
-
-- **Tous les endpoints (sauf /auth/**) nécessitent un token JWT**
-- **Format du header :** `Authorization: Bearer VOTRE_TOKEN`
-- **Le token expire après 24 heures**
-- **Les services communiquent via Eureka Service Discovery**
-
-## 🐳 Docker
-
-```bash
-# Build et Run tous les services
-docker-compose up -d
-
-# Voir les logs
-docker-compose logs -f
-
-# Arrêter tous les services
-docker-compose down
-```
-
-## 👥 Auteurs
-
-ENSA Safi - Java Avancée - 4ème Année
-
-## 📄 Licence
-
-Ce projet est développé dans le cadre d'un projet académique.
+L'API est sécurisée par JWT. Pour accéder aux endpoints protégés :
+1. S'authentifier via `/api/auth/login`.
+2. Utiliser le token reçu dans le header Authorization : `Bearer <token>`.

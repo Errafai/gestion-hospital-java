@@ -1,62 +1,72 @@
 package com.hospital.security;
 
+import com.hospital.exception.APIException;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
-    
-    @Value("${jwt.secret}")
+
+    @Value("${app.jwt-secret}")
     private String jwtSecret;
-    
-    @Value("${jwt.expiration}")
-    private long jwtExpirationMs;
-    
-    private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
-    }
-    
+
+    @Value("${app.jwt-expiration-milliseconds}")
+    private long jwtExpirationDate;
+
+    // generate JWT token
     public String generateToken(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
-        
-        return Jwts.builder()
-                .subject(userDetails.getUsername())
-                .issuedAt(now)
-                .expiration(expiryDate)
-                .signWith(getSigningKey())
+        String username = authentication.getName();
+
+        Date currentDate = new Date();
+        Date expireDate = new Date(currentDate.getTime() + jwtExpirationDate);
+
+        String token = Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(expireDate)
+                .signWith(key())
                 .compact();
+        return token;
     }
-    
-    public String getUsernameFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getSigningKey())
+
+    private Key key() {
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+    }
+
+    // get username from Jwt token
+    public String getUsername(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key())
                 .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        
+                .parseClaimsJws(token)
+                .getBody();
         return claims.getSubject();
     }
-    
+
+    // validate Jwt token
     public boolean validateToken(String token) {
         try {
-            Jwts.parser()
-                    .verifyWith(getSigningKey())
+            Jwts.parserBuilder()
+                    .setSigningKey(key())
                     .build()
-                    .parseSignedClaims(token);
+                    .parse(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
+        } catch (MalformedJwtException ex) {
+            throw new APIException(HttpStatus.BAD_REQUEST, "Invalid JWT token");
+        } catch (ExpiredJwtException ex) {
+            throw new APIException(HttpStatus.BAD_REQUEST, "Expired JWT token");
+        } catch (UnsupportedJwtException ex) {
+            throw new APIException(HttpStatus.BAD_REQUEST, "Unsupported JWT token");
+        } catch (IllegalArgumentException ex) {
+            throw new APIException(HttpStatus.BAD_REQUEST, "JWT claims string is empty.");
         }
     }
 }
-

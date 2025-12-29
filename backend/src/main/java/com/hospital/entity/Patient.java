@@ -2,6 +2,7 @@ package com.hospital.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,74 +11,64 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
-@Table(name = "patients")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "patients")
 @EntityListeners(AuditingEntityListener.class)
 public class Patient {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(unique = true, nullable = false, length = 20)
-    private String numeroPatient;
-    
+
+    @Column(name = "patient_number", unique = true, length = 20)
+    private String patientNumber;
+
     @Column(nullable = false, length = 100)
-    private String nom;
-    
+    private String lastName;
+
     @Column(nullable = false, length = 100)
-    private String prenom;
-    
-    @Column(nullable = false)
-    private LocalDate dateNaissance;
-    
+    private String firstName;
+
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 1)
-    private Sexe sexe;
-    
+    private Gender gender;
+
     @Column(unique = true, length = 20)
     private String cin;
-    
+
     @Column(length = 20)
-    private String telephone;
-    
+    private String phone;
+
     @Column(length = 100)
     private String email;
-    
+
     @Column(columnDefinition = "TEXT")
-    private String adresse;
-    
+    private String address;
+
     @Column(length = 100)
-    private String ville;
-    
-    @Column(length = 5)
-    private String groupeSanguin;
-    
+    private String city;
+
+    @Column(name = "blood_group", length = 5)
+    private String bloodGroup;
+
     @Column(columnDefinition = "TEXT")
     private String allergies;
-    
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-    
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-    
-    @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private DossierMedical dossierMedical;
-    
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<RendezVous> rendezVous = new ArrayList<>();
-    
-    public enum Sexe {
-        M, F
-    }
-}
 
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
+    private MedicalRecord medicalRecord;
+}

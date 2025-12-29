@@ -2,59 +2,55 @@ package com.hospital.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
-@Table(name = "consultations")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "consultations")
 @EntityListeners(AuditingEntityListener.class)
 public class Consultation {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dossier_medical_id", nullable = false)
-    private DossierMedical dossierMedical;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "medecin_id", nullable = false)
-    private Medecin medecin;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "medical_record_id")
+    private MedicalRecord medicalRecord;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
+
     @OneToOne
-    @JoinColumn(name = "rendez_vous_id")
-    private RendezVous rendezVous;
-    
-    @Column(nullable = false)
-    private LocalDateTime dateConsultation;
-    
+    @JoinColumn(name = "appointment_id")
+    private Appointment appointment;
+
+    @Column(name = "consultation_date")
+    private LocalDateTime consultationDate;
+
     @Column(columnDefinition = "TEXT")
-    private String symptomes;
-    
+    private String symptoms;
+
     @Column(columnDefinition = "TEXT")
-    private String diagnostic;
-    
+    private String diagnosis;
+
     @Column(columnDefinition = "TEXT")
-    private String traitement;
-    
+    private String treatment;
+
     @Column(columnDefinition = "TEXT")
     private String observations;
-    
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-    
-    @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Prescription> prescriptions = new ArrayList<>();
-}
 
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+}

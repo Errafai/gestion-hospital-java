@@ -1,52 +1,52 @@
 package com.hospital.controller;
 
-import com.hospital.dto.JwtAuthenticationResponse;
-import com.hospital.dto.LoginRequest;
-import com.hospital.dto.RegisterRequest;
-import com.hospital.entity.User;
+import com.hospital.dto.JWTAuthResponse;
+import com.hospital.dto.LoginDto;
+import com.hospital.dto.RegisterDto;
+import com.hospital.dto.UserDto;
 import com.hospital.service.AuthService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/auth")
 public class AuthController {
-    
-    @Autowired
+
     private AuthService authService;
-    
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody RegisterRequest request) {
-        User user = authService.register(request);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
-    
+
     @PostMapping("/login")
-    public ResponseEntity<JwtAuthenticationResponse> login(@Valid @RequestBody LoginRequest request) {
-        JwtAuthenticationResponse response = authService.login(request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<JWTAuthResponse> login(@RequestBody LoginDto loginDto) {
+        String token = authService.login(loginDto);
+        JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
+        jwtAuthResponse.setAccessToken(token);
+        return ResponseEntity.ok(jwtAuthResponse);
     }
-    
-    @PostMapping("/refresh")
-    public ResponseEntity<String> refresh() {
-        // TODO: Implement refresh token logic
-        return ResponseEntity.ok("Refresh token endpoint");
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
+        String response = authService.register(registerDto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    
+
     @GetMapping("/me")
-    public ResponseEntity<String> getCurrentUser() {
-        // TODO: Implement get current user logic
-        return ResponseEntity.ok("Current user endpoint");
+    public ResponseEntity<UserDto> getCurrentUser() {
+        return ResponseEntity.ok(authService.getCurrentUser());
     }
-    
+
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
-        // TODO: Implement logout logic (token blacklist)
-        return ResponseEntity.ok("Logout successful");
+        // Client side just drops token, but we can provide an endpoint
+        return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<String> refresh() {
+        // Not implemented (needs refresh token logic)
+        return ResponseEntity.ok("Refresh token not implemented yet");
     }
 }
-

@@ -1,90 +1,70 @@
 package com.hospital.controller;
 
-import com.hospital.dto.PatientDTO;
+import com.hospital.dto.PatientDto;
 import com.hospital.service.PatientService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/patients")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/patients")
 public class PatientController {
-    
-    @Autowired
+
     private PatientService patientService;
-    
+
+    public PatientController(PatientService patientService) {
+        this.patientService = patientService;
+    }
+
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'MEDECIN', 'RECEPTIONNISTE')")
-    public ResponseEntity<?> getAllPatients(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        if (page >= 0 && size > 0) {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<PatientDTO> patients = patientService.getAllPatients(pageable);
-            return ResponseEntity.ok(patients);
-        } else {
-            List<PatientDTO> patients = patientService.getAllPatients();
-            return ResponseEntity.ok(patients);
-        }
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
+    public ResponseEntity<Page<PatientDto>> getAllPatients(Pageable pageable) {
+        return ResponseEntity.ok(patientService.getAllPatients(pageable));
     }
-    
+
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MEDECIN', 'RECEPTIONNISTE')")
-    public ResponseEntity<PatientDTO> getPatientById(@PathVariable Long id) {
-        PatientDTO patient = patientService.getPatientById(id);
-        return ResponseEntity.ok(patient);
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
+    public ResponseEntity<PatientDto> getPatientById(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok(patientService.getPatientById(id));
     }
-    
-    @GetMapping("/numero/{numero}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MEDECIN', 'RECEPTIONNISTE')")
-    public ResponseEntity<PatientDTO> getPatientByNumero(@PathVariable String numero) {
-        PatientDTO patient = patientService.getPatientByNumero(numero);
-        return ResponseEntity.ok(patient);
+
+    @GetMapping("/patient-number/{patientNumber}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
+    public ResponseEntity<PatientDto> getPatientByPatientNumber(
+            @PathVariable(name = "patientNumber") String patientNumber) {
+        return ResponseEntity.ok(patientService.getPatientByPatientNumber(patientNumber));
     }
-    
+
     @GetMapping("/search")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MEDECIN', 'RECEPTIONNISTE')")
-    public ResponseEntity<List<PatientDTO>> searchPatients(@RequestParam String q) {
-        List<PatientDTO> patients = patientService.searchPatients(q);
-        return ResponseEntity.ok(patients);
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
+    public ResponseEntity<Page<PatientDto>> searchPatients(@RequestParam("q") String query, Pageable pageable) {
+        return ResponseEntity.ok(patientService.searchPatients(query, pageable));
     }
-    
+
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONNISTE')")
-    public ResponseEntity<PatientDTO> createPatient(@Valid @RequestBody PatientDTO patientDTO) {
-        PatientDTO created = patientService.createPatient(patientDTO);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    @PreAuthorize("hasAnyRole('ADMIN', 'NURSE')")
+    public ResponseEntity<PatientDto> createPatient(@RequestBody PatientDto patientDto) {
+        return new ResponseEntity<>(patientService.createPatient(patientDto), HttpStatus.CREATED);
     }
-    
+
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONNISTE')")
-    public ResponseEntity<PatientDTO> updatePatient(@PathVariable Long id, 
-                                                   @Valid @RequestBody PatientDTO patientDTO) {
-        PatientDTO updated = patientService.updatePatient(id, patientDTO);
-        return ResponseEntity.ok(updated);
+    @PreAuthorize("hasAnyRole('ADMIN', 'NURSE')")
+    public ResponseEntity<PatientDto> updatePatient(@PathVariable(name = "id") Long id,
+            @RequestBody PatientDto patientDto) {
+        return ResponseEntity.ok(patientService.updatePatient(id, patientDto));
     }
-    
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
+    public ResponseEntity<String> deletePatient(@PathVariable(name = "id") Long id) {
         patientService.deletePatient(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Patient deleted successfully");
     }
-    
-    @GetMapping("/{id}/dossier")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MEDECIN', 'RECEPTIONNISTE')")
-    public ResponseEntity<?> getPatientDossier(@PathVariable Long id) {
-        // This will be handled by DossierMedicalController
-        return ResponseEntity.ok("Dossier endpoint");
-    }
-}
 
+    // /api/patients/{id}/dossier requires DossierService or just return DTO if
+    // implemented
+    // I'll leave it as a TODO or implement if service supports it directly
+}

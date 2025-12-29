@@ -1,33 +1,21 @@
 package com.hospital.dto;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class ConsultationDTO {
-    
+public class ConsultationDto {
     private Long id;
-    
-    @NotNull(message = "Dossier médical ID is required")
-    private Long dossierMedicalId;
-    
-    @NotNull(message = "Médecin ID is required")
-    private Long medecinId;
-    
-    private Long rendezVousId;
-    
-    @NotNull(message = "Date consultation is required")
-    private LocalDateTime dateConsultation;
-    
-    private String symptomes;
-    private String diagnostic;
-    private String traitement;
+    private Long medicalRecordId;
+    private Long doctorId;
+    private String doctorName;
+    private Long patientId;
+    private String patientName;
+    private Long appointmentId;
+    private LocalDateTime consultationDate;
+    private String symptoms;
+    private String diagnosis;
+    private String treatment;
     private String observations;
+    private LocalDateTime createdAt;
 }
-
